@@ -3,12 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBaseWithXML", "DataBaseWithXML.csproj", "{8C91A4DA-ACA9-40D5-AA50-933A83BE5B00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataBaseWithXML", "DataBaseWithXML.csproj", "{8C91A4DA-ACA9-40D5-AA50-933A83BE5B00}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{80D5CA75-011A-458E-9330-4B18416D7886}"
-	ProjectSection(SolutionItems) = preProject
-		people.xml = people.xml
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,40 +1,60 @@
 ﻿using System.Xml.Serialization;
+using static Person;
 
-Person[] people = new Person[]
-{
-    new Person("Tom", 37),
-    new Person("Bob", 41)
-};
 
-XmlSerializer formatter = new XmlSerializer(typeof(Person[]));
-// сохранение массива в файл
-using (FileStream fs = new FileStream("person.xml", FileMode.OpenOrCreate))
+while (true)
 {
-    formatter.Serialize(fs, people);
-}
-// восстановление массива из файла
-using (FileStream fs = new FileStream("person.xml", FileMode.OpenOrCreate))
-{
-    Person[]? newpeople = formatter.Deserialize(fs) as Person[];
 
-    if (newpeople != null)
+    Console.WriteLine("Привет! Напиши 1, если хочешь записать внесённые данные или 2, чтобы посмотреть существующие");
+    int choice = Convert.ToInt16(Console.ReadLine());
+
+    //Массивы 
+    Person[] people = new Person[]
     {
-        foreach (Person person in newpeople)
-        {
-            Console.WriteLine($"Name: {person.Name} --- Age: {person.Age}");
-        }
+    new Person("Tom", 37, "Male"),
+    new Person("Bob", 41, "Male"),
+    new Person("Bill", 55, "Male")
+    };
+    //Формат
+    XmlSerializer formatter = new XmlSerializer(typeof(Person[]));
+
+    switch (choice)
+    {
+        case 1: //запись
+            using (FileStream fs = new FileStream("person.xml", FileMode.OpenOrCreate))
+            {
+                formatter.Serialize(fs, people);
+            }
+            Console.WriteLine("Новые данные сохранены.");
+            break;
+
+        case 2: //вывод
+            using (FileStream fs = new FileStream("person.xml", FileMode.OpenOrCreate))
+            {
+                Person[]? newpeople = formatter.Deserialize(fs) as Person[];
+
+                if (newpeople != null)
+                {
+                    foreach (Person person in newpeople)
+                    {
+                        Console.WriteLine($"Name: {person.Name} --- Age: {person.Age}");
+                    }
+                }
+            }
+            break;
+
     }
 }
 
-public class Person
-{
-    public string Name { get; set; } = "Undefined";
-    public int Age { get; set; } = 1;
 
-    public Person() { }
-    public Person(string name, int age)
-    {
-        Name = name;
-        Age = age;
-    }
-}
+
+
+
+
+
+
+//Готово:
+//разобраться с полями добавить пол
+//вынести Person в отдельный файл
+//Консольное окно с выбором(switch) ( если хотите записать нажмите единичку, если хотите получить записи, нажмите двоичку)
+//while true
