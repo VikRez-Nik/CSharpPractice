@@ -1,60 +1,54 @@
 ﻿using System.Xml.Serialization;
-using static Person;
 
+XmlSerializer formatter = new XmlSerializer(typeof(Person[]));
 
-while (true)
+List<Person> people = new(); //лист
+
+const string PeopleFilePath = "person.xml";
+if (File.Exists(PeopleFilePath))
 {
-
-    Console.WriteLine("Привет! Напиши 1, если хочешь записать внесённые данные или 2, чтобы посмотреть существующие");
-    int choice = Convert.ToInt16(Console.ReadLine());
-
-    //Массивы 
-    Person[] people = new Person[]
-    {
-    new Person("Tom", 37, "Male"),
-    new Person("Bob", 41, "Male"),
-    new Person("Bill", 55, "Male")
-    };
-    //Формат
-    XmlSerializer formatter = new XmlSerializer(typeof(Person[]));
-
-    switch (choice)
-    {
-        case 1: //запись
-            using (FileStream fs = new FileStream("person.xml", FileMode.OpenOrCreate))
-            {
-                formatter.Serialize(fs, people);
-            }
-            Console.WriteLine("Новые данные сохранены.");
-            break;
-
-        case 2: //вывод
-            using (FileStream fs = new FileStream("person.xml", FileMode.OpenOrCreate))
-            {
-                Person[]? newpeople = formatter.Deserialize(fs) as Person[];
-
-                if (newpeople != null)
-                {
-                    foreach (Person person in newpeople)
-                    {
-                        Console.WriteLine($"Name: {person.Name} --- Age: {person.Age}");
-                    }
-                }
-            }
-            break;
-
-    }
+    using FileStream fs = new FileStream(PeopleFilePath, FileMode.Open);
+    people.AddRange((Person[])formatter.Deserialize(fs));
 }
 
+Console.WriteLine("Привет!");
+while (true)
+{
+    Console.WriteLine("Напиши 1, если хочешь записать внесённые данные или 2, чтобы посмотреть существующие");
+    switch (Console.ReadLine())
+    {
+        case "1": //ввод
+            Console.WriteLine("Напиши имя человека");
+            string addname = Console.ReadLine();
 
+            Console.WriteLine("Напиши возраст");
+            int addage = Convert.ToInt16(Console.ReadLine());
 
+            Console.WriteLine($"Укажи пол. Мужской - m, женский - w");
+            Genders addgender = Console.ReadLine() switch
+            {
+                "m" => Genders.Мужчина,
+                "w" => Genders.Женщина,
+                _ => Genders.Мужчина
+            };
 
+            people.Add(new Person(addname, addage, addgender)); //запись 
 
-
-
-
-//Готово:
-//разобраться с полями добавить пол
-//вынести Person в отдельный файл
-//Консольное окно с выбором(switch) ( если хотите записать нажмите единичку, если хотите получить записи, нажмите двоичку)
-//while true
+            using (FileStream fs = new FileStream(PeopleFilePath, FileMode.OpenOrCreate))
+            {
+                formatter.Serialize(fs, people.ToArray());
+            }
+            break;
+        case "2": //вывод
+            foreach (var person in people)
+            {
+                Console.WriteLine($"Имя: {person.Name}  Возраст: {person.Age}  Пол: {person.Gender}");
+            }
+            break;
+        default: 
+            {
+                Console.WriteLine("Введи 1 или 2");
+                break;
+            }
+    }
+}
